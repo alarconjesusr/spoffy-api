@@ -1,0 +1,39 @@
+{
+  "properties": [
+    {
+      "name": "app.jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT signing secret."
+    },
+    {
+      "name": "app.jwt.expiration-ms",
+      "type": "java.lang.Long",
+      "description": "JWT expiration in milliseconds."
+    },
+    {
+      "name": "app.storage.endpoint",
+      "type": "java.lang.String",
+      "description": "MinIO endpoint URL."
+    },
+    {
+      "name": "app.storage.access-key",
+      "type": "java.lang.String",
+      "description": "MinIO access key."
+    },
+    {
+      "name": "app.storage.secret-key",
+      "type": "java.lang.String",
+      "description": "MinIO secret key."
+    },
+    {
+      "name": "app.storage.bucket-name",
+      "type": "java.lang.String",
+      "description": "MinIO bucket name for audio files."
+    },
+    {
+      "name": "app.storage.secure",
+      "type": "java.lang.Boolean",
+      "description": "Whether the MinIO connection uses TLS."
+    }
+  ]
+}
