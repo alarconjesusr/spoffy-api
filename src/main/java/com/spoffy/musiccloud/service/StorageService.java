@@ -7,7 +7,7 @@ public interface StorageService {
 
     InputStream download(String objectName);
 
-    String getPresignedGetUrl(String objectName, int expirySeconds);
+    String getPresignedGetUrl(String objectName);
 
     InputStream downloadRange(String objectName, long offset, long length);
 

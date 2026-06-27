@@ -1,6 +1,7 @@
 package com.spoffy.musiccloud.controller;
 
 import com.spoffy.musiccloud.domain.Album;
+import com.spoffy.musiccloud.dto.album.AlbumResponseDto;
 import com.spoffy.musiccloud.dto.song.SongResponse;
 import com.spoffy.musiccloud.service.AlbumService;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AlbumController {
     @GetMapping("/news")
     @Operation(summary = "Obtener nuevos albumnes agregados", description = "Devuelve la metadata de los nuevos álbumes agregados.")
     @ApiResponse(responseCode = "200", description = "Lista de nuevos álbumes", content = @Content(schema = @Schema(implementation = SongResponse.class)))
-    public List<Album> getNewAlbums() {
+    public List<AlbumResponseDto> getNewAlbums() {
         return albumService.getNewAlbums();
     }
 

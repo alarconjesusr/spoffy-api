@@ -3,7 +3,10 @@ package com.spoffy.musiccloud.service;
 import com.spoffy.musiccloud.domain.Album;
 import com.spoffy.musiccloud.domain.AlbumType;
 import com.spoffy.musiccloud.domain.Artist;
+import com.spoffy.musiccloud.dto.album.AlbumResponseDto;
 import com.spoffy.musiccloud.repository.AlbumRepository;
+
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
@@ -13,17 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AlbumService {
+public class AlbumService {    
 
     private final AlbumRepository albumRepository;
+    private final StorageService storageService;
 
-    public List<Album> getNewAlbums() {        
-        try {
-            return albumRepository.findByOrderByCreatedAtDesc();
-        } catch (Exception e) {
-            System.err.println("Error fetching new albums: " + e.getMessage());
-            return List.of();
-        }
+    public List<AlbumResponseDto> getNewAlbums() {
+        return albumRepository.findByOrderByCreatedAtDesc()
+                .stream()
+                .map(this::toAlbumResponseDto)
+                .toList();
     }
 
     @Transactional
@@ -75,5 +77,23 @@ public class AlbumService {
                 .replaceAll("[^a-z0-9]+", "-")
                 .replaceAll("(^-+|-+$)", "");
         return slug.isBlank() ? "album" : slug;
+    }
+
+    private AlbumResponseDto toAlbumResponseDto(Album album) {
+        String albumCoverStorageKey = album == null ? null : album.getCoverStorageKey();
+        String albumCoverUrl = albumCoverStorageKey == null || albumCoverStorageKey.isBlank()
+                ? null
+                : storageService.getPresignedGetUrl(albumCoverStorageKey);
+
+        return new AlbumResponseDto(
+                album.getId(),
+                album.getTitle(),
+                album.getSlug(),
+                album.getAlbumType(),
+                album.getReleaseDate(),
+                album.getReleaseYear(),
+                album.getLabel(),
+                albumCoverUrl
+            );
     }
 }

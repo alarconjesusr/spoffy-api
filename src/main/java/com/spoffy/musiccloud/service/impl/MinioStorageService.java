@@ -20,6 +20,7 @@ public class MinioStorageService implements StorageService {
 
     private final MinioClient minioClient;
     private final StorageProperties storageProperties;
+    private static final int COVER_URL_EXPIRY_SECONDS = 60 * 60;
 
     @Override
     public void upload(String objectName, InputStream inputStream, long size, String contentType) {
@@ -48,13 +49,13 @@ public class MinioStorageService implements StorageService {
     }
 
     @Override
-    public String getPresignedGetUrl(String objectName, int expirySeconds) {
+    public String getPresignedGetUrl(String objectName) {
         try {
             return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .method(Method.GET)
                     .bucket(storageProperties.bucketName())
                     .object(objectName)
-                    .expiry(expirySeconds)
+                    .expiry(COVER_URL_EXPIRY_SECONDS)
                     .build());
         } catch (Exception ex) {
             throw new IllegalStateException("Unable to generate presigned URL", ex);

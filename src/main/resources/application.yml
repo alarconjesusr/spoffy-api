@@ -6,6 +6,7 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:spoffy}
     password: ${SPRING_DATASOURCE_PASSWORD:spoffy}
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -33,3 +34,11 @@ app:
     secret-key: ${MINIO_SECRET_KEY:minioadmin}
     bucket-name: ${MINIO_BUCKET:music}
     secure: ${MINIO_SECURE:false}
+
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.web: DEBUG
+    org.hibernate: DEBUG

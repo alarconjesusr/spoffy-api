@@ -25,6 +25,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -61,9 +63,11 @@ public class Album {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "primary_artist_id")
+    @JsonIgnore
     private Artist primaryArtist;
 
     @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Song> songs = new ArrayList<>();
 
     @CreatedDate

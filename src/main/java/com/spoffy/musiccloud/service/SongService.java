@@ -28,9 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class SongService {
-
-    private static final int COVER_URL_EXPIRY_SECONDS = 60 * 60;
-
     private final SongRepository songRepository;
     private final ArtistService artistService;
     private final AlbumService albumService;
@@ -172,7 +169,7 @@ public class SongService {
         String albumCoverStorageKey = album == null ? null : album.getCoverStorageKey();
         String albumCoverUrl = albumCoverStorageKey == null || albumCoverStorageKey.isBlank()
                 ? null
-                : storageService.getPresignedGetUrl(albumCoverStorageKey, COVER_URL_EXPIRY_SECONDS);
+                : storageService.getPresignedGetUrl(albumCoverStorageKey);
 
         return new SongTopResponse(
                 song.getId(),
