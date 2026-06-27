@@ -4,10 +4,12 @@ import com.spoffy.musiccloud.config.StorageProperties;
 import com.spoffy.musiccloud.service.StorageService;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
+import io.minio.http.Method;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,20 @@ public class MinioStorageService implements StorageService {
                     .build());
         } catch (Exception ex) {
             throw new IllegalStateException("Unable to download file from storage", ex);
+        }
+    }
+
+    @Override
+    public String getPresignedGetUrl(String objectName, int expirySeconds) {
+        try {
+            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .method(Method.GET)
+                    .bucket(storageProperties.bucketName())
+                    .object(objectName)
+                    .expiry(expirySeconds)
+                    .build());
+        } catch (Exception ex) {
+            throw new IllegalStateException("Unable to generate presigned URL", ex);
         }
     }
 

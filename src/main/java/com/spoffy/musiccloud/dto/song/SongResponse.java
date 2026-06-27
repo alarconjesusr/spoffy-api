@@ -11,6 +11,7 @@ public record SongResponse(
 	@Schema(example = "lofi, chill, instrumental") String tags,
 	@Schema(example = "audio/mpeg") String contentType,
 	@Schema(example = "7340032") long sizeBytes,
+	@Schema(example = "128") long playCount,
 	@Schema(example = "midnight-drive.mp3") String originalFilename,
 	@Schema(example = "11111111-1111-1111-1111-111111111111") UUID uploadedBy,
 	Instant createdAt) {
