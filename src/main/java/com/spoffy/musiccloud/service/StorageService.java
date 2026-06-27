@@ -7,6 +7,8 @@ public interface StorageService {
 
     InputStream download(String objectName);
 
+    String getPresignedGetUrl(String objectName);
+
     InputStream downloadRange(String objectName, long offset, long length);
 
     void delete(String objectName);

@@ -25,12 +25,12 @@ public class RestSecurityExceptionHandler implements AuthenticationEntryPoint, A
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        writeProblemDetail(response, HttpStatus.UNAUTHORIZED, "Debes autenticarte con un JWT válido", List.of());
+        // writeProblemDetail(response, HttpStatus.UNAUTHORIZED, "Debes autenticarte con un JWT válido", List.of());
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        writeProblemDetail(response, HttpStatus.FORBIDDEN, "No tienes permisos para realizar esta acción", List.of());
+        // writeProblemDetail(response, HttpStatus.FORBIDDEN, "No tienes permisos para realizar esta acción", List.of());
     }
 
     private void writeProblemDetail(HttpServletResponse response, HttpStatus status, String detail, List<String> details) throws IOException {

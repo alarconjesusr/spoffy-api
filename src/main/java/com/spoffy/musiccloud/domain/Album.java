@@ -3,15 +3,18 @@ package com.spoffy.musiccloud.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,13 +25,15 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "songs")
+@Table(name = "albums", uniqueConstraints = @UniqueConstraint(columnNames = {"primary_artist_id", "slug"}))
 @EntityListeners(AuditingEntityListener.class)
-public class Song {
+public class Album {
 
     @Id
     @GeneratedValue
@@ -38,63 +43,32 @@ public class Song {
     private String title;
 
     @Column(nullable = false)
-    private String artist;
+    private String slug;
 
-    @Column(length = 2000)
-    private String tags;
-
-    @Column(nullable = false, unique = true)
-    private String storageKey;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String originalFilename;
-
-    @Column(nullable = false)
-    private String contentType;
-
-    @Column(nullable = false)
-    private long sizeBytes;
-
-    @Column(nullable = false)
-    private long playCount = 0;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "album_id")
-    private Album album;
-
-    @OneToMany(mappedBy = "song", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<SongArtist> songArtists = new ArrayList<>();
-
-    @OneToOne(mappedBy = "song", fetch = FetchType.LAZY, orphanRemoval = true)
-    private SongAudioMetadata audioMetadata;
+    private AlbumType albumType = AlbumType.SINGLE;
 
     @Column
-    private Integer trackNumber;
+    private LocalDate releaseDate;
 
     @Column
-    private Integer discNumber;
+    private Integer releaseYear;
 
     @Column
-    private Integer durationSec;
-
-    @Column
-    private Boolean explicitContent;
-
-    @Column(length = 16)
-    private String languageCode;
-
-    @Column(length = 64)
-    private String isrc;
-
-    @Column(length = 8000)
-    private String lyrics;
+    private String label;
 
     @Column
     private String coverStorageKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploaded_by")
-    private User uploadedBy;
+    @JoinColumn(name = "primary_artist_id")
+    @JsonIgnore
+    private Artist primaryArtist;
+
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Song> songs = new ArrayList<>();
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
